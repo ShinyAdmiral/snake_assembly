@@ -1,0 +1,117 @@
+LEVEL NAME
+Level (3)
+
+INTRO MESSAGE
+[ Level (3) ] Press "Space" to Start! Press "Escape" to Leave...
+
+VICTORY MESSAGE
+Victory on Level (3)! Press "Enter" to Continue!
+
+DEATH MESSAGE
+welp... You Died! Press "Escape" to Leave or Press "Enter" to Start Over
+
+START SPEED
+60
+
+POWERUP FREQUENCY
+20
+
+POINTS GAINED
+250
+
+START LENGTH
+25
+
+REQUIRED FOOD
+25
+
+SPEED POWERUP ANIMATION
+front
+red
+70
+front
+yellow
+102
+END
+
+SLOW POWERUP ANIMATION
+front
+purple
+83
+front
+turqoise
+115
+END
+
+SNAKE ANIMATION
+back
+red
+32
+END
+
+WALL ANIMATION
+back
+light yellow
+32
+END
+
+FOOD ANIMATION
+front
+blue
+254
+front
+light blue
+79
+END
+
+OBJECT PLACEMENT
+OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+OOOO------------P-------------------------------------------------------------------------------OOOO
+OOOO-------------------------S-------------------------------------------------P----------------OOOO
+OOOO-------------------------OOOOOOOOO--------------------------------------------------P-------OOOO
+OOOO------------P------------OOOOOOOOO-------------------------P--------------------------------OOOO
+OOOO-------------------OO----OOOOOOOOO--------------------------------OOOOOOOOO-----------------OOOO
+OOOO-------------------OO----OOOOOOOOO-----P--------------------------OOOOOOOOO---OOO---OOO--O--OOOO
+OOOO-------------------------OOOOOOOOO-----------OOF------------------OOOOOOOOO---OOO---OOO--O--OOOO
+OOOO----OO-------------------OOOOOOOOO-----------OOOOOOOOOO-----------OOOOOOOOO---OOO---OOO--O--OOOO
+OOOO----OO-------------------------------P--------------FOO-----------OOOOOOOOO----------F------OOOO
+OOOO------------------------------------------------------------------OOOOOOOOO---OOOO----------OOOO
+OOOO--------------P---------------------------------------------------------P-----OOOO--OOOOOOOOOOOO
+OOOO----------OOOOOOOOO------------OOOOOOOOOOOOOOOOOOOOOOOOOOOO-------------------------OOOOOOOOOOOO
+OOOO----------OOOOOOOOO------------OOOOOOOOOOOOOOOOOOOOOOOOOOOO-------------------------OOOOOOOOOOOO
+OOOO----------OOOOOOOOO------------OOOOOOOOOOOOOOOOOOOOOOOOOOOO-----------------OOOOOOOOOOOOOOOOOOOO
+OOOO----------OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO-----------------OOOOOOOOOOOOOOOOOOOO
+OOOO----------OOOOOOOOO-----F------OOOOOOOOOOOOOOOOOOOOOOOOOOOO-----------------OOOOOOOOOOOOOOOOOOOO
+OOOO----P-----OOOOOOOOO------------OOOOOOOOOOOOOOOOOOOOOOOOOOOO-----------------OOOOOOOOO---F---OOOO
+OOOO---------------F---------------OOOOOOOOOOOOOOOOOOOOOOOOOOOO-----------------OOOOOOOOO-P-F-P-OOOO
+OOOO-------------------------------OOOOOOOOOOOOOOOOOOOOOOOOOOOO-----------------OOOOOOOOO-------OOOO
+OOOO-----------------------P-------OOOOOOOOOOOOOOOOOOOOOOOOOOOO-----OOO-------OOOO----------O---OOOO
+OOOO--------------------------------------------PFP-----------------OOO----F--OOOO----------O---OOOO
+OOOO----------P------OOOOOOOOO-----OOOOOOOOOOOOOOOOOOOOOOOOOOOO-----OOO-------OOOO--------------OOOO
+OOOO-----------------OOOOOOOOO-----OOOOOOOOOOOOOOOOOOOOOOOOOOOO---------------------------------OOOO
+OOOO-----------------OOOOOOOOO-----OOOOOOOOOOOOOOOOOOOOOOOOOOOO---------------------------------OOOO
+OOOO---P-------------OOOOOOOOO--P--OOOOOOOOOOOOOOOOOOOOOOOOOOOO--------------OO------F----------OOOO
+OOOO-----------------OOOOOOOOO-----OOOOOOOOOOOOOOOOOOOOOOOOOOOO--------------OO-----------------OOOO
+OOOO-----------------OOOOOOOOO-----OOOOOOOOOOOOOOOOOOOOOOOOOOOO--------P------------------------OOOO
+OOOO-------------------------------OOOOOOOOOOOOOOOOOOOOOOOOOOOO---------------------------------OOOO
+OOOO----------OO-------------------OOOOOOOOOOOOOOOOOOOOOOOOOOOO---------------------------------OOOO
+OOOOOOO-F-OOOOOO-------------------OOOOOOOOOOOOOOOOOOOOOOOOOOOO---------------------------------OOOO
+OOOOOOO---OOOOOO---------------------------------------------------OO----------P----------------OOOO
+OOOO----------------OOOOOOOOO----------------------OO--------------OO---------------------------OOOO
+OOOO------P---------OOOOOOOOO----------------OO----OO---------------------------------P---------OOOO
+OOOO----------------OOOOOOOOO----------OO----OO-P-----------------------------------------------OOOO
+OOOO----------------OOOOOOOOO----------OO-----------------------------------OOOOOOOOO-----------OOOO
+OOOO------OO--------OOOOOOOOO----P-----------F-------OO---------------F-----OOOOOOOOO-----------OOOO
+OOOO------OO--------OOOOOOOOO--------------OO--------OO---------------------OOOOOOOOO-----------OOOO
+OOOO---------------------------------------OO---OO--------OO----------------OOOOOOOOO-----------OOOO
+OOOO-------------P------------------P-----------OO--------OO------------OOOOOOOOOOOOO-----------OOOO
+OOOO---OO----------------OO-------------------------------P-------------OOOOOOOOOOOOO-----------OOOO
+OOOO---OO----------------OO-----------------OO--------------------------OOOO-------F------------OOOO
+OOOO----------------------------------------OO--------------------------OOOO--------------------OOOO
+OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
