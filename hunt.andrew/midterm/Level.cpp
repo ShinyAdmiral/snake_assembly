@@ -301,9 +301,11 @@ void Level::updateScore()
 {
 	Game* game = Game::getInstance();
 
+	Snake snake = game->getSnake();
+
 	std::string gameInfo;
 	std::stringstream ss;
-	ss << "Score:_" << calcScore(&game->getSnake()) << "_|_FPS:_" << game->getFPSNum();
+	ss << "Score:_" << calcScore(&snake) << "_|_FPS:_" << game->getFPSNum();
 	ss >> gameInfo;
 	game->getDisplay()->changeTitle(gameInfo);
 }
