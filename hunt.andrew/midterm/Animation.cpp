@@ -54,9 +54,44 @@ Sprite Animation::getCurrentSprit()
 void Animation::update(double frameTime)
 {
 	//update index and add to time
-	mCurrentIndex = (int)mCurrentTime / (int)mLengthTime;
-	mCurrentTime += frameTime;
+	//mCurrentIndex = (int)mCurrentTime / (int)mLengthTime;
+	//mCurrentTime += frameTime;
+	volatile int currentIndex = mCurrentIndex;
+	volatile double lengthTime = mLengthTime;
+	volatile double currentTime = mCurrentTime;
+	volatile int animationLength = mAnimationLength;
+	volatile bool resetAnimation = mResetAnimation;
 
+	__asm {
+		//mov eax, currentIndex
+		//movq xmm0, qword ptr[lengthTime]
+		//cvttsd2si ebx, xmm0
+		//cmp eax, 0
+		//jz skip_div
+		//cmp ebx, 0
+		//jz skip_div
+		//div ebx
+		//cvtsi2sd xmm0, ebx
+		//skip_div:
+		//mov eax, 0
+		//movsd qword ptr[currentTime], xmm0
+		//movsd xmm1, qword ptr[frameTime]
+		//addsd xmm0, xmm1
+
+	//	//cvttsd2si eax, qword ptr[animationLength]
+	//	//cmp dword ptr[currentIndex], eax
+	//	//jle skip_reset
+	//	//
+	//	//// Reset animation
+	//	//mov currentIndex, 0
+	//	//xorps xmm0, xmm0
+	//	//movsd qword ptr[currentTime], xmm0
+	//	//mov resetAnimation, 1
+	//	//
+	//	//skip_reset:
+	//	//mov resetAnimation, 0
+	//	// Do nothing
+	}
 	//reset if at the end of animation
 	if (mCurrentIndex > mAnimationLength)
 	{
@@ -64,8 +99,7 @@ void Animation::update(double frameTime)
 		mCurrentTime = 0;
 		mResetAnimation = true;
 	}
-
 	else 
 		mResetAnimation = false;
-	
+
 }
