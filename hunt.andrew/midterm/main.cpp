@@ -18,7 +18,7 @@ int main(void)
 	//create game
 	Game::initInstance();
 	Game* game = Game::getInstance();
-	game->init(24);
+	game->init(30);
 	
 	//start loop
 	game->doLoop();
