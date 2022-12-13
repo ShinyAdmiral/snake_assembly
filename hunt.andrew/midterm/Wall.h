@@ -1,5 +1,6 @@
 #pragma once
 #include "Unit.h"
+#include <intrin.h>
 
 class Wall : public Unit
 {
@@ -15,6 +16,7 @@ class Wall : public Unit
 		//virtual void update(const double gameFPS, Vector2D boundary, InputManager input);
 
 		//mutator
+		void updateDirection(__m128 newDir);
 		void updateDirection(Vector2D newDir);
 
 		//accessor

@@ -20,6 +20,13 @@ Wall::Wall(Vector2D loc, Animation anim, Vector2D dir)
 }
 
 //mutator
+void Wall::updateDirection(__m128 newDir)
+{
+	int i_x = _mm_extract_ps(newDir, 3);
+	int i_y = _mm_extract_ps(newDir, 2);
+	mDirection = Vector2D(reinterpret_cast<float&>(i_x), reinterpret_cast<float&>(i_y));
+}
+
 void Wall::updateDirection(Vector2D newDir)
 {
 	mDirection = newDir;

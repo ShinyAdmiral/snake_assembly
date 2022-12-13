@@ -44,22 +44,11 @@ void Snake::update()
 	int xAxis = input->getKeyState(Input::X_AXIS);
 	int yAxis = input->getKeyState(Input::Y_AXIS);
 	
-	//std::cout << "mMoveTime * mSpeedRatio: " << (mMoveTime * mSpeedRatio) << std::endl;
-	//std::cout << "mCurrentTime" << mCurrentTime << std::endl;
-	//
-	//system("pause");
 	__m128d moveTimeVec = _mm_set1_pd(mMoveTime);
 	__m128d speedRatioVec = _mm_set1_pd(mSpeedRatio);
 	__m128d result = _mm_mul_pd(moveTimeVec, speedRatioVec);
 	__m128d cmpRes = _mm_cmpgt_pd(_mm_set1_pd(mCurrentTime), result);
 	int flags = _mm_movemask_pd(cmpRes);
-
-	//int flags = _mm_movemask_epd8(result);
-	//__m128i eax = _mm_set_epi32(_mm_movemask_pd(_mm_cmp_pd(result, _mm_set1_pd(mCurrentTime), _CMP_GT_OQ)), 0, 0, 0);
-	//__m128i resulti = _mm_and_si128(eax, _mm_set_epi32(0x0f, 0, 0, 0));
-	//int flags = _mm_movemask_epi8(resulti);
-	//mMoveTime* mSpeedRatio
-	//std:: cout << (flags & 0x01) << std::endl;
 
 	if (flags & 0x01) {	//checking for the greater than flag
 		int VxDirection = xAxis;
@@ -75,89 +64,165 @@ void Snake::update()
 			cmp eax, 0
 
 			je skip1
-				mov ebx, VCxDirection
-				cmp eax, ebx
-				je resetAll
-				jmp resetY
-
-			skip1:
-			mov eax, VyDirection
-			cmp eax, 0
+			mov ebx, VCxDirection
+			cmp eax, ebx
 			je resetAll
+			jmp resetY
+
+			skip1 :
+				mov eax, VyDirection
+				cmp eax, 0
+				je resetAll
 				mov ebx, VCyDirection
 				cmp eax, ebx
 				je resetAll
 				jmp skipall
 
-			resetAll:
+			resetAll :
 				mov VxDirection, 0
 				mov VyDirection, 0
 				jmp skipall
 
-			resetY:
+			resetY :
 				mov VyDirection, 0
 
-			skipall:
-			pop ebx
-			pop eax
+				skipall :
+				pop ebx
+				pop eax
+		};
+
+		int i_x, i_y;
+		__m128 xmm_dir = _mm_set_ps(0.0f, VyDirection, VxDirection, 0.0f);
+		__m128 cmp = _mm_cmpneq_ps(xmm_dir, _mm_setzero_ps());
+		flags = _mm_movemask_ps(cmp);
+		__m128 xmm_mDirection = _mm_set_ps(mDirection.getX(), mDirection.getY(), 0.0f, 0.0f);
+
+		if (flags != 0) {
+			xmm_mDirection = _mm_set_ps(VxDirection, VyDirection, 0.0f, 0.0f);
+			//temporary
+			int i_x = _mm_extract_ps(xmm_mDirection, 3);
+			int i_y = _mm_extract_ps(xmm_mDirection, 2);
+			mDirection = Vector2D(reinterpret_cast<float&>(i_x), reinterpret_cast<float&>(i_y));
 		}
 
-		//std::cout << VxDirection << std::endl;
-
-		if (VxDirection != 0 || VyDirection != 0)
-			mDirection = Vector2D(VxDirection, VyDirection);
-
-		//make vector for moving
-		Vector2D moveDist = Vector2D(mDirection.getX(), mDirection.getY());
+		i_x = _mm_extract_ps(xmm_mDirection, 3);
+		i_y = _mm_extract_ps(xmm_mDirection, 2);
+		__m128 xmm_moveDist = _mm_set_ps(reinterpret_cast<float&>(i_x), reinterpret_cast<float&>(i_y), 0.0f, 0.0f);
+		
+		//remove later
+		i_y = _mm_extract_ps(xmm_moveDist, 3);
+		i_y = _mm_extract_ps(xmm_moveDist, 2);
+		Vector2D moveDist = Vector2D(reinterpret_cast<float&>(i_x), reinterpret_cast<float&>(i_y));
 
 		//get number of segment and get the tail location
 		int length = mSegments.size();
 		mTailLocation = mSegments[length - 1]->getLocation();
 
+		__m128 xmm_mTailLocation = _mm_set_ps(mTailLocation.getX(), mTailLocation.getY(), 0.0f, 0.0f);
+
+		//greater than check
+		__m128i _m128i_length = _mm_set1_epi32(length);
+		__m128i mask = _mm_cmpgt_epi64(_m128i_length, _mm_set1_epi64x(1));
+		flags = _mm_movemask_epi8(mask);
+
 		//for more than one segment
-		if (length > 1)
+		if (flags != 0)
 		{
-			//set the new location of thw head
-			Vector2D newLocation = Vector2D(std::floor(mLocation.getX() + moveDist.getX()), std::floor(mLocation.getY() + moveDist.getY()));
-			setLocation(newLocation);
+			//set new location based on current direction and new direction
+			__m128 xmm_mLocation = _mm_set_ps(mLocation.getX(), mLocation.getY(), 0.0f, 0.0f);
+			__m128 xmm_new_loc_result = _mm_add_ps(xmm_mLocation, xmm_moveDist);
+			xmm_new_loc_result = _mm_floor_ps(xmm_new_loc_result);
+			i_x = _mm_extract_ps(xmm_new_loc_result, 3);
+			i_y = _mm_extract_ps(xmm_new_loc_result, 2);
+			setLocation(Vector2D(reinterpret_cast<float&>(i_x), reinterpret_cast<float&>(i_y)));
 
 			//make a list of pass position
-			std::vector<Vector2D> lastPosition;
-			for (int i = 0; i < length - 1; i++)
+			std::vector<__m128> lastPosition;
+
+
+			//set up and loop
+			_m128i_length = _mm_set1_epi32(length);
+			__m128i m_index = _mm_set1_epi32(0);
+			__m128i m_end_limit = _mm_sub_epi32(_m128i_length, _mm_set1_epi32(1));
+			mask = _mm_cmplt_epi32(m_index, m_end_limit);
+			flags = _mm_movemask_epi8(mask);
+			while (flags != 0) 
 			{
-				lastPosition.push_back(mSegments[i]->getLocation());
+				int i = _mm_extract_epi32(m_index, 4);
+				Vector2D c_loc = mSegments[i]->getLocation();
+				__m128 xmm_mLocation = _mm_set_ps(c_loc.getX(), c_loc.getY(), 0.0f, 0.0f);
+				lastPosition.push_back(xmm_mLocation);
+
+				m_index = _mm_add_epi32(m_index, _mm_set1_epi32(1));
+				mask = _mm_cmplt_epi32(m_index, m_end_limit);
+				flags = _mm_movemask_epi8(mask);
 			}
 
+			//for (int i = 0; i < length - 1; i++)
+			//{
+			//	Vector2D c_loc = mSegments[i]->getLocation();
+			//	__m128 xmm_mLocation = _mm_set_ps(c_loc.getX(), c_loc.getY(), 0.0f, 0.0f);
+			//	lastPosition.push_back(xmm_mLocation);
+			//}
+
+
 			//set second segment behind head
-			Vector2D segmentLoc = getLocation() - mDirection;
-			mSegments[0]->setLocation(segmentLoc);
-			static_cast<Wall*>(mSegments[0])->updateDirection(mDirection);
+			__m128 xmm_segmentLoc = _mm_sub_ps(xmm_new_loc_result, xmm_mDirection);
+			i_x = _mm_extract_ps(xmm_segmentLoc, 3);
+			i_y = _mm_extract_ps(xmm_segmentLoc, 2);
+			mSegments[0]->setLocation(Vector2D(reinterpret_cast<float&>(i_x), reinterpret_cast<float&>(i_y)));
+			static_cast<Wall*>(mSegments[0])->updateDirection(xmm_mDirection);
+
+			m_end_limit = _mm_set1_epi32(length);
+			m_index = _mm_set1_epi32(1);
+			mask = _mm_cmplt_epi32(m_index, m_end_limit);
+			flags = _mm_movemask_epi8(mask);
 
 			//set each one after that behind one another
-			for (int i = 1; i < length; i++)
+			while (flags != 0) 
 			{
-				mSegments[i]->setLocation(lastPosition[i - 1]);
-				static_cast<Wall*>(mSegments[i])->updateDirection(mSegments[i]->getLocation());
+				int i = _mm_extract_epi32(m_index, 4);
+				__m128i m_index_sub = _mm_sub_epi32(m_index, _mm_set1_epi32(1));
+				int im1 = _mm_extract_epi32(m_index_sub, 4);
+
+				i_x = _mm_extract_ps(lastPosition[im1], 3);
+				i_y = _mm_extract_ps(lastPosition[im1], 2);
+				mSegments[i]->setLocation(Vector2D(reinterpret_cast<float&>(i_x), reinterpret_cast<float&>(i_y)));
+				static_cast<Wall*>(mSegments[i])->updateDirection(lastPosition[im1]);
+
+				m_index = _mm_add_epi32(m_index, _mm_set1_epi32(1));
+				mask = _mm_cmplt_epi32(m_index, m_end_limit);
+				flags = _mm_movemask_epi8(mask);
 			}
 		}
 
 		else if (length == 1)
 		{
 			//set the new location of thw head
-			Vector2D newLocation = Vector2D(std::floor(mLocation.getX() + moveDist.getX()), std::floor(mLocation.getY() + moveDist.getY()));
-			setLocation(newLocation);
+			__m128 xmm_mLocation = _mm_set_ps(mLocation.getX(), mLocation.getY(), 0.0f, 0.0f);
+			__m128 xmm_new_loc_result = _mm_add_ps(xmm_mLocation, xmm_moveDist);
+			xmm_new_loc_result = _mm_floor_ps(xmm_new_loc_result);
+			i_x = _mm_extract_ps(xmm_new_loc_result, 3);
+			i_y = _mm_extract_ps(xmm_new_loc_result, 2);
+			setLocation(Vector2D(reinterpret_cast<float&>(i_x), reinterpret_cast<float&>(i_y)));
 
 			//set the other segment behind the head
-			Vector2D segmentLoc = getLocation() - mDirection;
-			mSegments[0]->setLocation(segmentLoc);
-			static_cast<Wall*>(mSegments[0])->updateDirection(mDirection);
+			__m128 xmm_segmentLoc = _mm_sub_ps(xmm_new_loc_result, xmm_mDirection);
+			i_x = _mm_extract_ps(xmm_segmentLoc, 3);
+			i_y = _mm_extract_ps(xmm_segmentLoc, 2);
+			mSegments[0]->setLocation(Vector2D(reinterpret_cast<float&>(i_x), reinterpret_cast<float&>(i_y)));
+			static_cast<Wall*>(mSegments[0])->updateDirection(xmm_mDirection);
 		}
 
 		//else just move the head
 		else
 		{
-			Vector2D newLocation = Vector2D(std::floor(mLocation.getX() + moveDist.getX()), std::floor(mLocation.getY() + moveDist.getY()));
-			setLocation(newLocation);
+			__m128 xmm_mLocation = _mm_set_ps(mLocation.getX(), mLocation.getY(), 0.0f, 0.0f);
+			__m128 xmm_new_loc_result = _mm_add_ps(xmm_mLocation, xmm_moveDist);
+			xmm_new_loc_result = _mm_floor_ps(xmm_new_loc_result);
+			i_x = _mm_extract_ps(xmm_new_loc_result, 3);
+			i_y = _mm_extract_ps(xmm_new_loc_result, 2);
+			setLocation(Vector2D(reinterpret_cast<float&>(i_x), reinterpret_cast<float&>(i_y)));
 		}
 
 		//reset current time
