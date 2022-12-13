@@ -1,5 +1,5 @@
 #include "InputManager.h"
-
+#include <intrin.h>
 void InputManager::update() 
 {
 	//get previouse input
@@ -20,6 +20,7 @@ void InputManager::update()
 	// Continuous Input
 	//==========================================
 	//make x_axis
+	unsigned char scanCode = _inp(0x60);
 	int right	= GetAsyncKeyState(VK_RIGHT)|| GetAsyncKeyState('D');
 	int left	= GetAsyncKeyState(VK_LEFT)	|| GetAsyncKeyState('A');
 	mXaxis		= right - left;

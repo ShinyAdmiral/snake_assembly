@@ -42,7 +42,18 @@ Animation::Animation(std::vector<Sprite> arrayOfSprites, double fps)
 	mCurrentIndex = 0;
 	mAnimationFPS = fps;
 	mResetAnimation = false;
-	mLengthTime = ONE_SECOND / mAnimationFPS;
+
+	double volatile lengthTime;
+	double volatile oneSecond = ONE_SECOND;
+	double volatile animationFPS = mAnimationFPS;
+
+	_asm {
+		movsd xmm0, oneSecond
+		movsd xmm1, animationFPS
+		divsd xmm0, xmm1
+		movsd lengthTime, xmm0
+	}
+	mLengthTime = lengthTime;
 }
 
 Sprite Animation::getCurrentSprit() 
@@ -53,19 +64,51 @@ Sprite Animation::getCurrentSprit()
 
 void Animation::update(double frameTime)
 {
-	//update index and add to time
-	mCurrentIndex = (int)mCurrentTime / (int)mLengthTime;
-	mCurrentTime += frameTime;
+	double volatile currentTime = mCurrentTime;
+	double volatile lengthTime = mLengthTime;
+	double volatile vframeTime = frameTime;
+	int volatile animationLength = mAnimationLength;
+	int volatile currentIndex;
+	bool volatile resetAnimation = mResetAnimation;
 
-	//reset if at the end of animation
-	if (mCurrentIndex > mAnimationLength)
-	{
-		mCurrentIndex = 0;
-		mCurrentTime = 0;
-		mResetAnimation = true;
+	_asm {
+		push eax
+		//update index and add to time
+		movsd xmm0, currentTime
+		movsd xmm1, lengthTime
+		divsd xmm0, xmm1
+		cvttsd2si eax, xmm0
+		mov currentIndex, eax
+
+		movsd xmm0, currentTime
+		movsd xmm1, vframeTime
+		addsd xmm0, xmm1
+		movsd currentTime, xmm0
+
+		//reset if at the end of animation
+		cmp eax, animationLength
+
+		jg reset
+
+		// else case
+		mov resetAnimation, 0
+		jmp done
+
+		// if case
+		reset:
+		xor eax, eax
+		cvtsi2sd xmm0, eax
+		mov currentIndex, 0
+		movsd currentTime, xmm0
+		mov resetAnimation, 1
+
+		done:
+		pop eax
 	}
 
-	else 
-		mResetAnimation = false;
-	
+	mCurrentTime = currentTime;
+	mLengthTime = lengthTime;
+	mCurrentIndex = currentIndex;
+	mResetAnimation = resetAnimation;
+
 }
