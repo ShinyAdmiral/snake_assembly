@@ -307,7 +307,7 @@ void Level::updateScore()
 	std::stringstream ss;
 	ss << "Score:_" << calcScore(&snake) << "_|_FPS:_" << game->getFPSNum();
 	ss >> gameInfo;
-	game->getDisplay()->changeTitle(gameInfo);
+	//game->getDisplay()->changeTitle(gameInfo);
 }
 
 void Level::draw(Display& display)

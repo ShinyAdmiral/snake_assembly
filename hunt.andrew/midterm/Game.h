@@ -60,6 +60,8 @@ class Game : public Trackable
 
 		double mFPS = 30.0f;				//frame rate of game (in milisecs)
 		double mFPSNumber = 30.0f;			//frame rate of game
+		double mTimeTracker = 30.0f;		//for debugging
+		double mFPSCounter = 0.0f;				//for debugging
 
 		Sprite mBackgroundSprite;			//background sprite when clearing
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include "Game.h"
+#include <sstream>
 
 //singleton instance
 Game* Game::mGameInstance = nullptr;
@@ -149,6 +150,18 @@ void Game::doLoop()
 			//==========================================
 			// LOOP
 			//==========================================
+
+			mTimeTracker += timer.getElapsedTime();
+			mFPSCounter += 1.0;
+
+			if (mFPSCounter >= mFPS) {
+				mTimeTracker /= mFPS;
+				std::stringstream stream;
+				stream << "AVG Time Elapsed: " << mTimeTracker << "ms";
+				mDisplay.changeTitle(stream.str());
+				mTimeTracker = 0;
+				mFPSCounter = 0;
+			}
 
 			//stop timer and calc sleep time
 			timer.stop();
