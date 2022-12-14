@@ -53,8 +53,8 @@ void Snake::update()
 	if (flags & 0x01) {	//checking for the greater than flag
 		int VxDirection = xAxis;
 		int VyDirection = yAxis;
-		int VCxDirection = -mDirection.getX();
-		int VCyDirection = -mDirection.getY();
+		int VCxDirection = -(int)mDirection.getX();
+		int VCyDirection = -(int)mDirection.getY();
 
 		_asm {
 			push eax
@@ -92,13 +92,13 @@ void Snake::update()
 		};
 
 		int i_x, i_y;
-		__m128 xmm_dir = _mm_set_ps(0.0f, VyDirection, VxDirection, 0.0f);
+		__m128 xmm_dir = _mm_set_ps(0.0f, (float)VyDirection, (float)VxDirection, 0.0f);
 		__m128 cmp = _mm_cmpneq_ps(xmm_dir, _mm_setzero_ps());
 		flags = _mm_movemask_ps(cmp);
 		__m128 xmm_mDirection = _mm_set_ps(mDirection.getX(), mDirection.getY(), 0.0f, 0.0f);
 
 		if (flags != 0) {
-			xmm_mDirection = _mm_set_ps(VxDirection, VyDirection, 0.0f, 0.0f);
+			xmm_mDirection = _mm_set_ps((float)VxDirection, (float)VyDirection, 0.0f, 0.0f);
 			//temporary
 			int i_x = _mm_extract_ps(xmm_mDirection, 3);
 			int i_y = _mm_extract_ps(xmm_mDirection, 2);
@@ -148,7 +148,7 @@ void Snake::update()
 			flags = _mm_movemask_epi8(mask);
 			while (flags != 0) 
 			{
-				int i = _mm_extract_epi32(m_index, 4);
+				int i = _mm_extract_epi32(m_index, 3);
 				Vector2D c_loc = mSegments[i]->getLocation();
 				__m128 xmm_mLocation = _mm_set_ps(c_loc.getX(), c_loc.getY(), 0.0f, 0.0f);
 				lastPosition.push_back(xmm_mLocation);
@@ -181,9 +181,9 @@ void Snake::update()
 			//set each one after that behind one another
 			while (flags != 0) 
 			{
-				int i = _mm_extract_epi32(m_index, 4);
+				int i = _mm_extract_epi32(m_index, 3);
 				__m128i m_index_sub = _mm_sub_epi32(m_index, _mm_set1_epi32(1));
-				int im1 = _mm_extract_epi32(m_index_sub, 4);
+				int im1 = _mm_extract_epi32(m_index_sub, 3);
 
 				i_x = _mm_extract_ps(lastPosition[im1], 3);
 				i_y = _mm_extract_ps(lastPosition[im1], 2);
